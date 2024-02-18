@@ -17,7 +17,7 @@ const Modal = ({ isOpen, onClose  }) => {
     const handleClose = () => {
       localStorage.setItem('modalClosed', 'true');
       onClose();
-      navigate('/');
+      navigate('/main');
     };
   return (  
     <>

@@ -1,14 +1,22 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate} from "react-router-dom";
 import axios from "axios";
 import "../FontAwesome";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NotiContent, NotiHeader, NotiBack, NotiTitle, NotiSort, NotiSortDiv, NotiBoard } from "../styled/Notification.styled";
 import Board from "../component/NotificationBoard";
 
-export default function Announcement() {
+export default function Notification() {
   const [sort, setSort] = useState("전체");
   const [notiData, setNotiData] = useState([]);
-  const [DetailNotiData, setDetailNotiData] = useState([]);
+  const navigate = useNavigate(); 
+  const [Token, setToken] = useState('');
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("Token");
+    setToken(storedToken);
+    console.log(storedToken);
+  }, []);
 
   useEffect(() => {
     fetchData(sort);
@@ -22,36 +30,17 @@ export default function Announcement() {
       }
       const response = await axios.get(url, {
         headers: {
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ3dW5zb2hvQG1haWwudWxzYW4uYWMua3IiLCJlbWFpbCI6Ind1bnNvaG9AbWFpbC51bHNhbi5hYy5rciIsImlhdCI6MTcwODE1MTIyOSwiZXhwIjoxNzA4MTU4NDI5fQ.WzJi_jCEqp1imb-Iu1VgXEbAdip6krc09gtk3hCupNA",
+          'Authorization': `Bearer ${Token}`,
         },
       });
       if (response.data.isSuccess === true) {
         setNotiData(response.data.result.list);
+        console.log(notiData);
       } else {
         console.error("서버 응답 오류:", response.data.message);
       }
     } catch (error) {
       console.error("공지사항 데이터를 가져오는 중 오류 발생:", error);
-    }
-  };
-
-  const fetchNotiData = async (id) => {
-    try {
-      let url = `http://13.125.247.248:8080/api/v1/announcement/${id}`;
-      const response = await axios.get(url, {
-        headers: {
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ3dW5zb2hvQG1haWwudWxzYW4uYWMua3IiLCJlbWFpbCI6Ind1bnNvaG9AbWFpbC51bHNhbi5hYy5rciIsImlhdCI6MTcwODE1MTIyOSwiZXhwIjoxNzA4MTU4NDI5fQ.WzJi_jCEqp1imb-Iu1VgXEbAdip6krc09gtk3hCupNA",
-        },
-      });
-      if (response.data.isSuccess === true) {
-        setDetailNotiData(response.data.result);
-      } else {
-        console.error("서버 응답 오류:", response.data.message);
-      }
-    } catch (error) {
-      console.error("공지사항 자세히보기 데이터를 가져오는 중 오류 발생:", error);
     }
   };
 
@@ -61,6 +50,13 @@ export default function Announcement() {
 
   const handleBackClick = () => {
     window.history.back();
+  };
+
+  const notiClick = (id) => {
+    console.log(id);
+    if (id !== null) {
+      navigate('/NotificationView', { state: { id, Token } });
+    }
   };
 
   return (
@@ -83,8 +79,8 @@ export default function Announcement() {
       </NotiSortDiv>
       <NotiBoard>
         {notiData.map((noti) => (
-          <Board
-            key={noti.id}
+          <Board onClick={() => notiClick(noti.id)}
+            id={noti.id}
             title={noti.title}
             date={noti.date}
           />

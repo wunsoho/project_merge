@@ -9,7 +9,13 @@ function Review() {
   const { id } = location.state || {};
   const [facilityData, setFacilityData] = useState(null);
   const [averageScore, setAverageScore] = useState(null);
+  const [Token, setToken] = useState('');
 
+  useEffect(() => {
+    const storedToken = localStorage.getItem("Token");
+    setToken(storedToken);
+    console.log(storedToken);
+  }, []);
 
   const calcStarRates = (score) => {
     let tempStarRatesArr = [0, 0, 0, 0, 0];
@@ -27,14 +33,13 @@ function Review() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ3dW5zb2hvQG1haWwudWxzYW4uYWMua3IiLCJlbWFpbCI6Ind1bnNvaG9AbWFpbC51bHNhbi5hYy5rciIsImlhdCI6MTcwODE1MTIyOSwiZXhwIjoxNzA4MTU4NDI5fQ.WzJi_jCEqp1imb-Iu1VgXEbAdip6krc09gtk3hCupNA';
         const response = await fetch(
           `http://13.125.247.248:8080/api/v1/user/${id}/reviews/byFacility?page=1`,
           {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${Token}`,
             },
           }
         );
@@ -59,7 +64,7 @@ function Review() {
     };
 
     fetchData();
-  }, [id]);
+  }, [id, Token]);
 
   return (
     <div className="ReviewBody">

@@ -12,6 +12,13 @@ import Map from './Map';
 function Detail1() {
   const location = useLocation();
   const { id } = location.state || {};
+  const [Token, setToken] = useState('');
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("Token");
+    setToken(storedToken);
+    console.log(storedToken);
+  }, []);
   const navigate = useNavigate();
   const [facilityData, setFacilityData] = useState(null);
   const [facilityImages, setFacilityImages] = useState([]);
@@ -20,12 +27,11 @@ function Detail1() {
   useEffect(() => {
     const fetchFacilityImages = async () => {
       try {
-        const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ3dW5zb2hvQG1haWwudWxzYW4uYWMua3IiLCJlbWFpbCI6Ind1bnNvaG9AbWFpbC51bHNhbi5hYy5rciIsImlhdCI6MTcwODE2NTM1MiwiZXhwIjoxNzA4MTcyNTUyfQ.KmirzUJ-rwXjJad3mncoY5FXh2Z3mRt3fEd4j3fVjNo';
         const response = await fetch(`http://13.125.247.248:8080/api/v1/facility/${id}/img?page=1`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${Token}`
           },
         });
         if (response.ok) {
@@ -46,7 +52,7 @@ function Detail1() {
     };
 
     fetchFacilityImages();
-  }, [id]);
+  }, [id, Token]);
   const settings1 = {
     infinite: true,
     speed: 500,
@@ -97,12 +103,17 @@ function Detail1() {
       };
     }, []);
     const onClickButton1 = () => {
-        navigate(`/status`);
+        navigate(`/status`, {
+          state: {
+            Token : Token,
+          },
+        });
     };
 
     const onClickButton2 = () => {
         navigate(`/facility/${id}/reserve1`, {
           state: {
+            Token : Token,
             buildingName: facilityData.buildingName,
             name: facilityData.name,
             location: facilityData.location,
@@ -113,6 +124,7 @@ function Detail1() {
     const onClickReviewButton = () => {
       navigate(`/review`, {
         state: {
+          Token : Token,
           id : id
         },
       });
@@ -120,12 +132,11 @@ function Detail1() {
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ3dW5zb2hvQG1haWwudWxzYW4uYWMua3IiLCJlbWFpbCI6Ind1bnNvaG9AbWFpbC51bHNhbi5hYy5rciIsImlhdCI6MTcwODE2NTM1MiwiZXhwIjoxNzA4MTcyNTUyfQ.KmirzUJ-rwXjJad3mncoY5FXh2Z3mRt3fEd4j3fVjNo';
           const response = await fetch(`http://13.125.247.248:8080/api/v1/facility/${id}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
+              'Authorization': `Bearer ${Token}`
             },
           });
   
@@ -142,7 +153,7 @@ function Detail1() {
       };
   
       fetchData();
-    }, [id]);
+    }, [id, Token]);
     useEffect(() => {
     }, [facilityData]);
   return (

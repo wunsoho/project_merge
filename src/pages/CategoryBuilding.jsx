@@ -6,6 +6,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CategoryContent, CategoryHeader, CategoryBack, CategoryTitle, CategorySearch, CategoryAll, Category1st, Category2nd, Category3rd } from "../styled/CategoryBuilding.styled";
 
 export default function CategoryBuilding() {
+  const [Token, setToken] = useState('');
+  useEffect(() => {
+    const storedToken = localStorage.getItem("Token");
+    setToken(storedToken);
+    console.log(storedToken);
+  }, []);
   const [selected1stCategory, setSelected1stCategory] = useState("건물별");
   const [selected2ndCategory, setSelected2ndCategory] = useState(null);
   const [selected3rdCategory, setSelected3rdCategory] = useState(null);
@@ -29,8 +35,7 @@ export default function CategoryBuilding() {
       }
       const response = await axios.get(url, {
         headers: {
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ3dW5zb2hvQG1haWwudWxzYW4uYWMua3IiLCJlbWFpbCI6Ind1bnNvaG9AbWFpbC51bHNhbi5hYy5rciIsImlhdCI6MTcwODE1MTIyOSwiZXhwIjoxNzA4MTU4NDI5fQ.WzJi_jCEqp1imb-Iu1VgXEbAdip6krc09gtk3hCupNA",
+          'Authorization': `Bearer ${Token}`,
         },
       });
       if (response.data.isSuccess === true) {
@@ -68,7 +73,7 @@ export default function CategoryBuilding() {
   const handle3rdCategoryClick = (facility) => {
     setSelected3rdCategory(facility);
     const id = facility.id;
-    navigate('/detailinfo', { state : {id} });
+    navigate('/detailinfo', { state : {id, Token} });
   };
 
   const handleBackClick = () => {

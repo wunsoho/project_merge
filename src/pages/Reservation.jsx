@@ -6,6 +6,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ReservationContent, ReservationHeader, ReservationTitle, ReservationSearch, ReservationCategoryAll, ReservationCategory1st, ReservationCategory2nd } from "../styled/Reservation.styled";
 
 export default function Reservation() {
+  const [Token, setToken] = useState('');
+  useEffect(() => {
+    const storedToken = localStorage.getItem("Token");
+    setToken(storedToken);
+    console.log(storedToken);
+  }, []);
   const [categories, setCategories] = useState([]);
   const [selected1stCategory, setSelected1stCategory] = useState(null);
   const [selected2ndCategory, setSelected2ndCategory] = useState(null);
@@ -17,7 +23,7 @@ export default function Reservation() {
         'http://13.125.247.248:8080/api/v1/facility/category/building',
         {
           headers: {
-            Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ3dW5zb2hvQG1haWwudWxzYW4uYWMua3IiLCJlbWFpbCI6Ind1bnNvaG9AbWFpbC51bHNhbi5hYy5rciIsImlhdCI6MTcwODE3MjMxNCwiZXhwIjoxNzA4MTc5NTE0fQ.fRgSBkrGlpgH91Sh1HNQVpleqtn4s7aVcagpnA-3K_0",
+            'Authorization': `Bearer ${Token}`,
           },
         }
       );
@@ -28,7 +34,7 @@ export default function Reservation() {
       };
     };
     fetchData();
-  }, []);
+  }, [Token]);
 
   const handle1stCategoryClick = (category) => {
     if (category.count > 0) {
@@ -40,7 +46,7 @@ export default function Reservation() {
   const handle2ndCategoryClick = (facility) => {
     setSelected2ndCategory(facility);
     const id = facility.id;
-    navigate('/facility/${id}', { state : {id} });
+    navigate('/facility/${id}', { state : {id, Token} });
   };
 
   return (

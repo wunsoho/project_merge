@@ -3,7 +3,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Main from "./component/Main/Main";
 import Deatil from "./component/Detail/Detail";
 import Reserve1 from "./component/Reserve/Reserve1";
-import Status from "./component/Re_status/Status";
+import Status from "./component/Status/Status";
 import Review from "./component/Review/Review";
 import Return from "./component/Return/Return";
 import './App.css';
@@ -21,6 +21,7 @@ import Notification from "./pages/Notification"
 import FAQ from "./pages/FAQ"
 import Inquiry from "./pages/Inquiry"
 import Building from "./component/Detail/BuildDetail";
+import Login from "./component/Login/Login";
 
 function App() {  
   function setScreenSize() {
@@ -34,7 +35,12 @@ function App() {
     <BrowserRouter>
     <div>
       <Routes>
-        <Route path ="/" element={<Main/>}/>
+        <Route path ="/" element={<Login/>}/>
+        <Route path="/main" element={
+          <>
+            <Main />
+            <NavigationBar />
+          </>} />
         <Route path ="/facility/:id" element={<Deatil/>}/>
         <Route path ="/facility/:id/reserve1" element = {<Reserve1/>}/>
         <Route path ="/building/:id" element={<Building/>}/>
@@ -45,7 +51,7 @@ function App() {
         <Route path ="/extension" element={<Extension/>}/>
         <Route path ="/Alarm" element={<Alarm/>}/>
         <Route path ="/history" element={<History/>}/>
-        <Route path="/" element={
+        <Route path="/1" element={
           <>
             <Home />
             <NavigationBar />

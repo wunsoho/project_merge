@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as A from './Main.style';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -20,6 +20,13 @@ text-align: center;
 function Main() {
     const [selectedCategory, setSelectedCategory] = useState('전체');
     const navigate = useNavigate();
+    const [Token, setToken] = useState('');
+
+    useEffect(() => {
+      const storedToken = localStorage.getItem("Token");
+      setToken(storedToken);
+      console.log(storedToken);
+    }, []);
 
     const categories = ['#조용한', '#회의', '#팀플', '#스터디룸', '#프린트'];
 
@@ -46,7 +53,7 @@ function Main() {
         navigate(`/return`);
     };
     const handleExtensionClick = () => {
-        navigate(`/extension`)
+        navigate(`/extension`);
     }
     const handleAlarmClick = () => {
         navigate(`/Alarm`);
@@ -104,7 +111,7 @@ function Main() {
             <A.Button1 onClick = {handleAlarmClick}>알람</A.Button1>
             <A.Button1 onClick = {handleHistoryClick}>예약 내역</A.Button1>
             <A.Button1 onClick = {handleInfoClick}>상세 정보</A.Button1>
-            <NavigationBar />
+            <NavigationBar Token={Token}/>
         </A.Body>
     );
 }

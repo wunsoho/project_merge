@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate} from 'react-router-dom';
 import Back from '../Image/ReserveImage/back.png';
 import Day from '../Image/ReserveImage/Day.png';
 import Info from '../Image/ReserveImage/Info.png';
@@ -18,9 +18,16 @@ import '../Reserve/Calendar.css';
 import Modal from '../Modal/ReserveModal';
 
 function Extension() {
+  const [Token, setToken] = useState('');
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("Token");
+    setToken(storedToken);
+    console.log(storedToken);
+  }, []);
     const navigate = useNavigate();
     const handleGoBack = () => {
-      navigate(`/`); 
+      navigate(`/main`); 
     }
     const [value, onChange] = useState(new Date());
     const [counter, setcount] = useState(0);
@@ -35,12 +42,11 @@ function Extension() {
       onChange(newValue);
     
       try {
-        const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ3dW5zb2hvQG1haWwudWxzYW4uYWMua3IiLCJlbWFpbCI6Ind1bnNvaG9AbWFpbC51bHNhbi5hYy5rciIsImlhdCI6MTcwODE1MTIyOSwiZXhwIjoxNzA4MTU4NDI5fQ.WzJi_jCEqp1imb-Iu1VgXEbAdip6krc09gtk3hCupNA';
         const response = await fetch(`http://13.125.247.248:8080/api/v1/reservation/time?facilityId=1&year=${year}&month=${month}&day=${day}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${Token}`
           },
         });
     
@@ -124,13 +130,11 @@ function Extension() {
     };
     const handleConfirmButtonClick = async () => {
       try {
-        const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ3dW5zb2hvQG1haWwudWxzYW4uYWMua3IiLCJlbWFpbCI6Ind1bnNvaG9AbWFpbC51bHNhbi5hYy5rciIsImlhdCI6MTcwODE1MTIyOSwiZXhwIjoxNzA4MTU4NDI5fQ.WzJi_jCEqp1imb-Iu1VgXEbAdip6krc09gtk3hCupNA'; 
-    
         const response = await fetch('http://13.125.247.248:8080/api/v1/reservation/extend', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${Token}`
           },
           body: JSON.stringify({
             reservation_id: 32, 
@@ -252,7 +256,7 @@ function Extension() {
           </B.AlarmButton>
             <B.ConfirmButton className = {selectedTime.length > 0 || selectedAlarm.length > 0 ? 'active' : ''}
             onClick={handleConfirmButtonClick}>확인</B.ConfirmButton>
-            <Modal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} />
+            <Modal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} Token={Token} />
         </B.Body>
     );
 }

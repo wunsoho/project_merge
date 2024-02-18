@@ -7,6 +7,13 @@ import { FAQContent, FAQHeader, FAQBack, FAQTitle, FAQSortDiv, FAQSort, FAQBoard
 import Board from "../component/FAQBoard";
 
 export default function FAQ() {
+  const [Token, setToken] = useState('');
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("Token");
+    setToken(storedToken);
+    console.log(storedToken);
+  }, []);
   const [selectedSort, setSelectedSort] = useState("reservation");
   const [faqData, setFaqData] = useState([]);
   const [expandedState, setExpandedState] = useState({});
@@ -22,8 +29,7 @@ export default function FAQ() {
         `http://13.125.247.248:8080/api/v1/faq/list?type=${sort}&page=1`,
         {
           headers: {
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ3dW5zb2hvQG1haWwudWxzYW4uYWMua3IiLCJlbWFpbCI6Ind1bnNvaG9AbWFpbC51bHNhbi5hYy5rciIsImlhdCI6MTcwODE1MTIyOSwiZXhwIjoxNzA4MTU4NDI5fQ.WzJi_jCEqp1imb-Iu1VgXEbAdip6krc09gtk3hCupNA",
+            'Authorization': `Bearer ${Token}`,
           },
         }
       );      

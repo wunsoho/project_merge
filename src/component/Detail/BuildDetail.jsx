@@ -16,16 +16,22 @@ function BuildDetail() {
   const [facilityData, setFacilityData] = useState(null);
   const [facilityImages, setFacilityImages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [Token, setToken] = useState('');
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("Token");
+    setToken(storedToken);
+    console.log(storedToken);
+  }, []);
 
   useEffect(() => {
     const fetchFacilityImages = async () => {
       try {
-        const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ3dW5zb2hvQG1haWwudWxzYW4uYWMua3IiLCJlbWFpbCI6Ind1bnNvaG9AbWFpbC51bHNhbi5hYy5rciIsImlhdCI6MTcwODE3MjMxNCwiZXhwIjoxNzA4MTc5NTE0fQ.fRgSBkrGlpgH91Sh1HNQVpleqtn4s7aVcagpnA-3K_0';
         const response = await fetch(`http://13.125.247.248:8080/api/v1/facility/building/${id}/img?page=1`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${Token}`
           },
         });
         if (response.ok) {
@@ -46,7 +52,7 @@ function BuildDetail() {
     };
 
     fetchFacilityImages();
-  }, [id]);
+  }, [id, Token]);
   const settings1 = {
     infinite: true,
     speed: 500,
@@ -120,12 +126,11 @@ function BuildDetail() {
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ3dW5zb2hvQG1haWwudWxzYW4uYWMua3IiLCJlbWFpbCI6Ind1bnNvaG9AbWFpbC51bHNhbi5hYy5rciIsImlhdCI6MTcwODE3MjMxNCwiZXhwIjoxNzA4MTc5NTE0fQ.fRgSBkrGlpgH91Sh1HNQVpleqtn4s7aVcagpnA-3K_0';
           const response = await fetch(`http://13.125.247.248:8080/api/v1/facility/building/${id}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
+              'Authorization': `Bearer ${Token}`
             },
           });
   
@@ -142,7 +147,7 @@ function BuildDetail() {
       };
   
       fetchData();
-    }, [id]);
+    }, [id, Token]);
     useEffect(() => {
     }, [facilityData]);
   return (

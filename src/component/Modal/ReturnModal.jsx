@@ -4,7 +4,7 @@ import './Modal.style';
 import * as B from './Modal.style';
 import ModalImg from '../Image/MainImage/ModalImage.png'
 
-const Modal = ({ isOpen, onClose  }) => {
+const Modal = ({ isOpen, onClose }) => {
     const navigate = useNavigate();
     const handleModalClick = () => {    
       if (isOpen) {
@@ -12,12 +12,12 @@ const Modal = ({ isOpen, onClose  }) => {
       }
     };
     const handleStatusBottomClick = () => {
-      navigate('/status')
+      navigate(`/status`)
     }
     const handleClose = () => {
       localStorage.setItem('modalClosed', 'true');
       onClose();
-      navigate('/');
+      navigate(`/main`);
     };
   return (  
     <>

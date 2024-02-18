@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as B from './Return.style';
 import Back from '../Image/ReserveImage/back.png';
@@ -20,9 +20,15 @@ const Return = () => {
     checkList3: false,
     checkList4: false,
   });
+  const [Token, setToken] = useState('');
 
+  useEffect(() => {
+    const storedToken = localStorage.getItem("Token");
+    setToken(storedToken);
+    console.log(storedToken);
+  }, []);
   const handleGoBack = () => {
-    navigate('/');
+    navigate(`/main`);
   };
 
   const sliderSettings = {
@@ -79,7 +85,6 @@ const Return = () => {
       checkList.checkList4
     ) {
       try {
-        const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ3dW5zb2hvQG1haWwudWxzYW4uYWMua3IiLCJlbWFpbCI6Ind1bnNvaG9AbWFpbC51bHNhbi5hYy5rciIsImlhdCI6MTcwNzgyNDIxNywiZXhwIjoxNzA3ODMxNDE3fQ.M4TP8J5sC4xdSoul9Z6TDpehTaWdySgeZfw-pHCImDw';
         const formData = new FormData();
         formData.append('image', file);
   
@@ -101,15 +106,15 @@ const Return = () => {
           formData,
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${Token}`,
               'Content-Type': 'multipart/form-data',
             },
           }
         );
+        setIsOpenModal(true);
   
         console.log('post 요청 성공');
         console.log(result);
-        setIsOpenModal(true);
       } catch (error) {
         console.log('요청 실패');
         console.log(error);
@@ -202,7 +207,7 @@ const Return = () => {
           </div>
         </B.CheckContainer>
         <B.returnButton onClick={onClickLogin2}>반납하기</B.returnButton>
-        <Modal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} />
+        <Modal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} Token={Token}/>
       </B.Body>
       <NavigationBar />
     </div>

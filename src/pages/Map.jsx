@@ -8,6 +8,13 @@ import { MapContent, MapHeader, MapMenu, MapTitle, MapNotice, GoogleMap, MarkerI
 import InfoPicImg from '../img/roomimg.png'
 
 function Map() {
+  const [Token, setToken] = useState('');
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("Token");
+    setToken(storedToken);
+    console.log(storedToken);
+  }, []);
   const [map, setMap] = useState(null);
   const [markerPosition, setMarkerPosition] = useState([]);
   const [markers, setMarkers] = useState([]);
@@ -51,7 +58,7 @@ function Map() {
             'http://13.125.247.248:8080/api/v1/facility/map',
             {
               headers: {
-                Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ3dW5zb2hvQG1haWwudWxzYW4uYWMua3IiLCJlbWFpbCI6Ind1bnNvaG9AbWFpbC51bHNhbi5hYy5rciIsImlhdCI6MTcwODE3MjMxNCwiZXhwIjoxNzA4MTc5NTE0fQ.fRgSBkrGlpgH91Sh1HNQVpleqtn4s7aVcagpnA-3K_0",
+                'Authorization': `Bearer ${Token}`,
               },
             }
           );
@@ -67,7 +74,7 @@ function Map() {
         }
       };
     fetchData();
-  }, []);
+  }, [Token]);
 
   useEffect(() => {
     if (map && markerPosition ) {
@@ -174,7 +181,7 @@ function Map() {
     try {
         const result = await axios.get(`http://13.125.247.248:8080/api/v1/facility/map/${buildingId}`, {
             headers: {
-                Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ3dW5zb2hvQG1haWwudWxzYW4uYWMua3IiLCJlbWFpbCI6Ind1bnNvaG9AbWFpbC51bHNhbi5hYy5rciIsImlhdCI6MTcwODE3MjMxNCwiZXhwIjoxNzA4MTc5NTE0fQ.fRgSBkrGlpgH91Sh1HNQVpleqtn4s7aVcagpnA-3K_0",
+              'Authorization': `Bearer ${Token}`,
             },
         });
         if (result.data.isSuccess === true) {
@@ -190,7 +197,7 @@ function Map() {
 
   const detailInfoClick = (id) => {
     if (id !== null) {
-      navigate(`/building/${id}`, { state: { id } });
+      navigate(`/building/${id}`, { state: { id, Token } });
     }
   };
 

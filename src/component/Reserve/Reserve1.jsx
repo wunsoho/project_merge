@@ -26,7 +26,14 @@ function Reserve1() {
       navigate(`/facility/${id}`,{
         state : {id}
       });
-    };  
+    };
+    const [Token, setToken] = useState('');
+
+    useEffect(() => {
+      const storedToken = localStorage.getItem("Token");
+      setToken(storedToken);
+      console.log(storedToken);
+    }, []);  
     const [value, onChange] = useState(new Date());
     const [counter, setcount] = useState(0);
     const [bookedTimes, setBookedTimes] = useState([]);
@@ -40,12 +47,11 @@ function Reserve1() {
       onChange(newValue);
     
       try {
-        const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ3dW5zb2hvQG1haWwudWxzYW4uYWMua3IiLCJlbWFpbCI6Ind1bnNvaG9AbWFpbC51bHNhbi5hYy5rciIsImlhdCI6MTcwODE1MTIyOSwiZXhwIjoxNzA4MTU4NDI5fQ.WzJi_jCEqp1imb-Iu1VgXEbAdip6krc09gtk3hCupNA';
         const response = await fetch(`http://13.125.247.248:8080/api/v1/reservation/time?facilityId=${id}&year=${year}&month=${month}&day=${day}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${Token}`
           },
         });
     
@@ -123,7 +129,6 @@ function Reserve1() {
     };
     const handleConfirmButtonClick = async () => {
       try {
-        const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ3dW5zb2hvQG1haWwudWxzYW4uYWMua3IiLCJlbWFpbCI6Ind1bnNvaG9AbWFpbC51bHNhbi5hYy5rciIsImlhdCI6MTcwODE1MTIyOSwiZXhwIjoxNzA4MTU4NDI5fQ.WzJi_jCEqp1imb-Iu1VgXEbAdip6krc09gtk3hCupNA';
         const selectedStartTime = selectedTime[0];
         const selectedDate = value;
         const selectedAlerts = selectedAlarm.map((selectedInfo) => {
@@ -151,7 +156,7 @@ function Reserve1() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${Token}`
           },
           body: JSON.stringify(requestBody)
         });
@@ -310,7 +315,7 @@ function Reserve1() {
             <B.ConfirmButton className = {selectedTime.length > 0 || selectedAlarm.length > 0 ? 'active' : ''}
             onClick={handleConfirmButtonClick}>확인</B.ConfirmButton>
             <Modal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} />
-            <NotificationModal isOpen={isOpen} message={notificationMessage} onClose={closeModal} />
+            <NotificationModal isOpen={isOpen} message={notificationMessage} onClose={closeModal} Token={Token} />
         </B.Body>
     );
 }

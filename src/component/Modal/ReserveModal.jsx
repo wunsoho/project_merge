@@ -12,12 +12,12 @@ const Modal = ({ isOpen, onClose  }) => {
       }
     };
     const handleStatusBottomClick = () => {
-      navigate('/status');
+      navigate(`/status`);
     }
     const handleClose = () => {
       localStorage.setItem('modalClosed', 'true');
       onClose();
-      navigate('/');
+      navigate(`/main`);
     };
   return (
     <>

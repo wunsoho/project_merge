@@ -11,6 +11,13 @@ const NavigationBar = () => {
     const activeNavFromPathname = location.pathname.split('/')[1];
     return activeNavFromPathname || "home";
   });
+  const [Token, setToken] = useState('');
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("Token");
+    setToken(storedToken);
+    console.log(storedToken);
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("activeNav", activeNav);
@@ -26,7 +33,7 @@ const NavigationBar = () => {
   return (
     <Wrapper>
       <StyledNav>
-        <NavLink to="/" onClick={() => handleClick('home')}>
+        <NavLink to={{ pathname: "/main", state: { Token } }} onClick={() => handleClick('home')}>
           <div>
             <FontAwesomeIcon
               icon="house"
@@ -36,7 +43,7 @@ const NavigationBar = () => {
             <p className={activeNav === 'home' ? "active" : "nav-item"}>홈</p>
           </div>
         </NavLink>
-        <NavLink to="/reservation" onClick={() => handleClick('reservation')}>
+        <NavLink to={{ pathname: "/reservation", state: { Token } }} onClick={() => handleClick('reservation')}>
           <div>
             <FontAwesomeIcon
               icon="calendar-check"
@@ -46,7 +53,7 @@ const NavigationBar = () => {
             <p className={activeNav === 'reservation' ? "active" : "nav-item"}>예약</p>
           </div>
         </NavLink>
-        <NavLink to="/map" onClick={() => handleClick('map')}>
+        <NavLink to={{ pathname: "/map", state: { Token } }} onClick={() => handleClick('map')}>
           <div>
             <FontAwesomeIcon
               icon="map-location-dot"
@@ -56,7 +63,7 @@ const NavigationBar = () => {
             <p className={activeNav === 'map' ? "active" : "nav-item"}>지도</p>
           </div>
         </NavLink>
-        <NavLink to="/mypage" onClick={() => handleClick('mypage')}>
+        <NavLink to={{ pathname: "/mypage", state: { Token } }} onClick={() => handleClick('mypage')}>
           <div>
             <FontAwesomeIcon
               icon="circle-user"
