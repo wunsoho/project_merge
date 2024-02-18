@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation} from 'react-router-dom';
+
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'moment/locale/ko'; 
@@ -16,7 +16,7 @@ const TimeTable = () => {
     setToken(storedToken);
     console.log(storedToken);
   }, []);
-  
+
   const fetchTimeTableData = async () => {
     try {
       const response = await fetch(`http://13.125.247.248:8080/api/v1/reservation/byfacility?facilityId=1&page=1&page=1`, {
@@ -50,7 +50,7 @@ const TimeTable = () => {
     };
 
     fetchReservationData();
-  }, [Token]);
+  }, [fetchTimeTableData, Token]);
   const CustomEvent = ({ event }) => (
     <div style={{ backgroundColor: '#5C5D61', borderRadius: '0px', opacity: 0.8, color: 'white', border: '0px', padding: '5px', position: 'relative', height: '100%' }}>
       <div style={{ position: 'absolute', top: '20%', left: '50%', transform: 'translate(-50%, -50%)' }}>
