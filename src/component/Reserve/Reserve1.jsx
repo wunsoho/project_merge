@@ -177,40 +177,6 @@ function Reserve1() {
         console.error('Error making reservation:', error);
       }
     };
-  const [isOpen, setIsOpen] = useState(false);
-  const [notificationMessage, setNotificationMessage] = useState('');
-
-  useEffect(() => {
-    const newClient = new Client({
-      brokerURL: 'ws://13.125.247.248:8080/ws',
-      onConnect: () => {
-        console.log('Connected to WebSocket server');
-
-        newClient.subscribe('/topic/alert', (message) => {
-          if (message.body) {
-            console.log(`Received message from server: ${message.body}`);
-
-            setIsOpen(true);
-            setNotificationMessage(message.body);
-          }
-        });
-      },
-      debug: (str) => console.log(str),
-    });
-
-    newClient.activate();
-
-    return () => {
-      if (newClient) {
-        newClient.deactivate();
-      }
-    };
-  }, []);
-
-  const closeModal = () => {
-    setIsOpen(false);
-  };
-
 
     return( 
         <B.Body>
