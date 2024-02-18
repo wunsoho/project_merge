@@ -281,7 +281,6 @@ function Reserve1() {
             <B.ConfirmButton className = {selectedTime.length > 0 || selectedAlarm.length > 0 ? 'active' : ''}
             onClick={handleConfirmButtonClick}>확인</B.ConfirmButton>
             <Modal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} />
-            <NotificationModal isOpen={isOpen} message={notificationMessage} onClose={closeModal} Token={Token} />
         </B.Body>
     );
 }
